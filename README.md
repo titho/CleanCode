@@ -4,7 +4,7 @@ A web app where users can create posts and read the posts. No frontend at this m
 
 ## Getting Started
 
-To run the project you must have installed typescript, Node and npm OR docker.
+To run the project you must have installed typescript, Node and `npm` **OR** docker.
 
 ### With docker
 
