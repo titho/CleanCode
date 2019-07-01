@@ -4,7 +4,7 @@ A web app where users can create posts and read the posts. No frontend at this m
 
 ## Getting Started
 
-To run the project you must have installed typescript, Node and `npm` **OR** docker.
+To run the project you must have installed `Node` and `npm` **OR** Docker.
 
 ### With docker
 
@@ -38,9 +38,10 @@ From there you can use [Swaggers`](https://swagger.io/) interface to test the ap
 ## Built with
 * Typescript
 * [Node](https://nodejs.org/en/)
-* [Express](https://expressjs.com/) - For the serverside
+* [Express](https://expressjs.com/) - Serverside backbone.
 * [MongoDB](https://www.mongodb.com/) - Using a cloud cluster.
-* [Swaggers`](https://swagger.io/) - For basic visualization and testing
+* [Swagger](https://swagger.io/) - Basic visualization and testing
+* [Docker](https://www.docker.com/) 
 
 ## Authors
 * Stoil Yankov - *Sofia University, **BCs Software Engineering***
