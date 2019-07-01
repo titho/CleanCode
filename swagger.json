@@ -1,0 +1,318 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "NodeJS Blog Api",
+      "description": "NodeJS api for a blog"
+    },
+    "schemes": [
+      "http"
+    ],
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "paths": {
+      "/register": {
+        "post": {
+          "description": "Attempts to register user",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "$ref": "#/parameters/CreateUser"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Registered user."
+            },
+            "400": {
+              "$ref": "#/responses/Standard400ErrorResponse"
+            },
+            "500": {
+              "$ref": "#/responses/Standard500ErrorResponse"
+            }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "description": "Attempts to log user in",
+          "parameters": [
+            {
+              "$ref": "#/parameters/LoginUser"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Request accepted",
+              "schema": {
+                "$ref": "#/definitions/JWToken"
+              }
+            },
+            "400": {
+              "$ref": "#/responses/Standard400ErrorResponse"
+            },
+            "500": {
+              "$ref": "#/responses/Standard500ErrorResponse"
+            }
+          }
+        }
+      },
+      "/posts": {
+        "get": {
+          "description": "Get all posts from all users.",
+          "security": [
+            {
+              "JWT": [
+  
+              ]
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Retrieved posts from users",
+              "schema": {
+                "$ref": "#/definitions/Posts"
+              }
+            },
+            "500": {
+              "$ref": "#/responses/Standard500ErrorResponse"
+            }
+          }
+        }
+      },
+      "/users/posts": {
+        "post": {
+          "description": "Create a post.",
+          "security": [
+            {
+              "JWT": [
+  
+              ]
+            }
+          ],
+          "parameters": [
+            {
+              "$ref": "#/parameters/CreatePost"
+            }
+          ],
+          "responses": {
+            "200": {
+              "$ref": "#/responses/Standard200SuccessResponse"
+            },
+            "400": {
+              "$ref": "#/responses/Standard400ErrorResponse"
+            },
+            "500": {
+              "$ref": "#/responses/Standard500ErrorResponse"
+            }
+          }
+        }
+      },
+      "/users/{username}/posts": {
+        "get": {
+          "description": "Get specifis users' posts",
+          "security": [
+            {
+              "JWT": [
+  
+              ]
+            }
+          ],
+          "parameters": [
+            {
+              "$ref": "#/parameters/username"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Retrieved posts from specific user",
+              "schema": {
+                "$ref": "#/definitions/Posts"
+              }
+            },
+            "500": {
+              "$ref": "#/responses/Standard500ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "LoginUser": {
+        "required": [
+          "username",
+          "password"
+        ],
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateUser": {
+        "required": [
+          "name",
+          "username",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "pattern": "[a-z0-9]@[a-z0-9].[a-z]{4,}",
+            "description": "The users' email"
+          },
+          "password": {
+            "pattern": "^(?=.*[a-z])(?=.*[0-9])(?=.{6,})",
+            "description": "The users' password",
+            "type": "string"
+          }
+        }
+      },
+      "CreatePost": {
+        "required": [
+          "title",
+          "content",
+          "associatedUser",
+          "dateCreated"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "associatedUser": {
+            "type": "string",
+            "description": "User that is associated with the psot"
+          },
+          "dateCreated": {
+            "description": "Date of post creation",
+            "type": "integer",
+            "format": "date"
+          }
+        }
+      },
+      "Post": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "associatedUser": {
+            "type": "string",
+            "description": "User that is associated with the psot"
+          },
+          "dateCreated": {
+            "description": "Date of post creation",
+            "type": "integer",
+            "format": "date"
+          }
+        }
+      },
+      "Posts": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Post"
+        }
+      },
+      "Error": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "JWToken": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "Standard200SuccessResponse": {
+        "description": "Request was successful.",
+        "schema": {
+          "$ref": "#/definitions/Error"
+        }
+      },
+      "Standard400ErrorResponse": {
+        "description": "Missing or invalid parameter.",
+        "schema": {
+          "$ref": "#/definitions/Error"
+        }
+      },
+      "Standard500ErrorResponse": {
+        "description": "An unexpected error occured.",
+        "schema": {
+          "$ref": "#/definitions/Error"
+        }
+      }
+    },
+    "parameters": {
+      "username": {
+        "name": "username",
+        "in": "path",
+        "required": true,
+        "description": "The users' username",
+        "type": "string"
+      },
+      "CreateUser": {
+        "name": "CreateUser",
+        "in": "body",
+        "required": true,
+        "description": "Parameters for user creation",
+        "schema": {
+          "$ref": "#/definitions/CreateUser"
+        }
+      },
+      "LoginUser": {
+        "name": "LoginUser",
+        "in": "body",
+        "required": true,
+        "description": "Parameters for users' login",
+        "schema": {
+          "$ref": "#/definitions/LoginUser"
+        }
+      },
+      "CreatePost": {
+        "name": "CreatePost",
+        "in": "body",
+        "required": true,
+        "description": "Parameters for post creation",
+        "schema": {
+          "$ref": "#/definitions/CreatePost"
+        }
+      }
+    },
+    "securityDefinitions": {
+      "JWT": {
+        "description": "",
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+  

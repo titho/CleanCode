@@ -37,7 +37,7 @@ router.post('/', async function (req: Request, res: Response) {
     });
 
     // Return token of user
-    const token = signToken(req.user);
+    const token = signToken(req.body.username);
     res.status(200).json({ token: token });
 });
 
